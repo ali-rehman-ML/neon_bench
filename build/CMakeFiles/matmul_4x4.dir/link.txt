@@ -1,0 +1,2 @@
+/usr/bin/ar cr libmatmul_4x4.a CMakeFiles/matmul_4x4.dir/4x4/4x4.s.o
+/usr/bin/ranlib libmatmul_4x4.a

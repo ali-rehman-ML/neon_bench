@@ -1,0 +1,7 @@
+/home/odroid/xnn test/exp/bench/build/CMakeFiles/UpdateYAML.dir
+/home/odroid/xnn test/exp/bench/build/CMakeFiles/matmul_4x4.dir
+/home/odroid/xnn test/exp/bench/build/CMakeFiles/matmul_4x8.dir
+/home/odroid/xnn test/exp/bench/build/CMakeFiles/matmul_6x8.dir
+/home/odroid/xnn test/exp/bench/build/CMakeFiles/bench_matmul.dir
+/home/odroid/xnn test/exp/bench/build/CMakeFiles/edit_cache.dir
+/home/odroid/xnn test/exp/bench/build/CMakeFiles/rebuild_cache.dir

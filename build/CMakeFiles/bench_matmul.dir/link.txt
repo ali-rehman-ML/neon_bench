@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/bench_matmul.dir/bench_matmul.cpp.o -o bench_matmul  libmatmul_4x4.a libmatmul_4x8.a libmatmul_6x8.a /usr/local/lib/libbenchmark.a -lrt
