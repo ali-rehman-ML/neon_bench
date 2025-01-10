@@ -1,2 +1,0 @@
-/usr/bin/ar cr libmatmul_6x8.a CMakeFiles/matmul_6x8.dir/6x8/6x8.s.o
-/usr/bin/ranlib libmatmul_6x8.a
