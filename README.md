@@ -57,3 +57,14 @@ To test with new dimensions, simply add the desired dimensions as a new line in 
 ```
 
 Run the benchmark after updating the dimensions file to measure the performance for the specified configurations.
+
+## Tested Platforms
+
+This benchmark has been tested on the following devices:
+- **Odroid N2** (ARM Cortex-A73)
+- **Raspberry Pi 5** (ARM Cortex-A76)
+- **Orange Pi 5 Plus** (ARM Cortex-A76 and Cortex-A55)
+
+## Benchmark Results
+
+<img src="bench.png" alt="Benchmark Results" width="600">
