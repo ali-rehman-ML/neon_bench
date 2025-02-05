@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <arm_neon.h>
+
 
 // Include headers for each implementation
 #include "4x4/4x4_neon_arm_8_2.h"
@@ -18,6 +20,21 @@ void initialize_matrix(int M, int N, float* ptr, float value) {
     for (int i = 0; i < M * N; i++) {
         ptr[i] = value;
     }
+}
+
+
+uint32_t PrefetchToL1(const void* ptr, size_t size) {
+  uint32_t step = 16;
+
+
+  const uint8_t* u8_ptr = static_cast<const uint8_t*>(ptr);
+  uint32_t sum = 0;
+  while (size >= step) {
+    sum += uint32_t(*u8_ptr);
+    u8_ptr += step;
+    size -= step;
+  }
+  return sum;
 }
 
 std::vector<std::tuple<int, int, int>> read_dimensions(const std::string& yaml_path) {
@@ -61,9 +78,14 @@ static void Benchmark_MatMul(benchmark::State& state, void (*matmul_func)(float*
 
     for (auto _ : state) {
         for (int i = 0; i < M; i += mb) {
+
+            PrefetchToL1(A+i*N, N * sizeof(float));
             for (int j = 0; j < K; j += nb) {
-                int k = 0, c_idx = i * K + j, a_idx = 0, b_idx = 0, loop_count = 0;
-                matmul_func(A, B, C + c_idx, N * sizeof(float), K * sizeof(float), i, j, k, a_idx, b_idx, loop_count);
+
+                int k = 0, c_idx = i * K + j, loop_count = 0;
+                int a_idx= i*N;
+                int b_idx= j*N;
+                matmul_func(A + a_idx, B + b_idx, C + c_idx, N * sizeof(float), K * sizeof(float), i, j, k, a_idx, b_idx, loop_count);
  
             }
         }

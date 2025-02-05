@@ -23,9 +23,9 @@ matmul_6x8:
 
 
     #a_idx
-    MUL     x8, x5, x3      // x9 = i * N
-    ADD     x8, x8, x7      // x9 = i * N + k
-    ADD     x0, x0, x8 
+    #MUL     x8, x5, x3      // x9 = i * N
+    #ADD     x8, x8, x7      // x9 = i * N + k
+    #ADD     x0, x0, x8 
 
 
     #b_idx 
@@ -33,9 +33,9 @@ matmul_6x8:
     MOV x17, #4        
     SDIV x18,x3 ,x17 
     MOV x16, #8 
-    MUL x9, x6, x16      // x9 = j * 8
-    ADD x9, x9, x7        // x9 = j * 8 + k
-    ADD x1, x1, x9        // B = B + b_idx
+    #MUL x9, x6, x16      // x9 = j * 8
+    #ADD x9, x9, x7        // x9 = j * 8 + k
+    #ADD x1, x1, x9        // B = B + b_idx
 
 
 
