@@ -23,19 +23,19 @@ matmul_4x4:
 
 
     #a_idx
-    MUL     x8, x5, x3      // x9 = i * N
-    ADD     x8, x8, x7      // x9 = i * N + k
-    ADD     x0, x0, x8 
+    #MUL     x8, x5, x3      // x9 = i * N
+    #ADD     x8, x8, x7      // x9 = i * N + k
+    #ADD     x0, x0, x8 
 
 
     #b_idx 
 
     MOV x17, #4        
-    SDIV x18,x3 ,x17 
-    MUL x9, x6, x17      // x9 = j * 8
-    ADD x9, x9, x7        // x9 = j * 8 + k
-    ADD x1, x1, x9        // B = B + b_idx
+    SDIV x18,x3 ,x17
 
+    #MUL x9, x6, x17      // x9 = j * 8
+    #ADD x9, x9, x7        // x9 = j * 8 + k
+    #ADD x1, x1, x9        // B = B + b_idx
 
 
     #Prefetch A block
@@ -50,16 +50,17 @@ matmul_4x4:
 
 
     #Prefetch B block
+
+
+
     PRFM        PLDL1KEEP, [x1, 0]
-    PRFM        PLDL1KEEP, [x1, 64]
-    PRFM        PLDL1KEEP, [x1, 128]
-    PRFM        PLDL1KEEP, [x1, 192]
+
 
     #Load A blolck
     LDR         q0, [x0], #16
-    LDR         q1, [x11], #16
-    LDR         q2, [x12], #16
-    LDR         q3, [x13], #16
+    LDR         q1, [x0], #16
+    LDR         q2, [x0], #16
+    LDR         q3, [x0], #16
 
 
 
@@ -78,48 +79,54 @@ matmul_4x4:
     #Load B Block aprtial (2x8)
     LDR         q4, [x1], #16
     LDR         q5, [x1], #16
-    LDR         q6, [x1], #16
-    LDR         q7, [x1], #16
+
 
 
 
 
 loop_start:
 
-    PRFM        PLDL1KEEP, [x0]  
+    PRFM        PLDL1KEEP, [x1,0]
+    LDR         q6, [x1], #16  
+
     FMLA        v20.4s, v4.4s,  v0.s[0]
     FMLA        v21.4s, v4.4s,  v1.s[0]
     FMLA        v22.4s, v4.4s,  v2.s[0]
     FMLA        v23.4s, v4.4s,  v3.s[0]
-    LDR         q4, [x1], #16
+    
 
-    PRFM        PLDL1KEEP, [x11] 
+
+    LDR         q7, [x1], #16
+
+
     FMLA        v20.4s, v5.4s,  v0.s[1]
     FMLA        v21.4s, v5.4s,  v1.s[1]
     FMLA        v22.4s, v5.4s,  v2.s[1]
     FMLA        v23.4s, v5.4s,  v3.s[1]
+    LDR         q4, [x1], #16
+
+
+    
+
+
+    FMLA        v20.4s, v6.4s,  v0.s[2]
+    FMLA        v20.4s, v7.4s,  v0.s[3]
+    LDR         q0, [x0], #16
+
+    FMLA        v21.4s, v6.4s,  v1.s[2]
+    FMLA        v21.4s, v7.4s,  v1.s[3]
+    LDR         q1, [x0], #16
+
+
+    FMLA        v22.4s, v6.4s,  v2.s[2]
+    FMLA        v22.4s, v7.4s,  v2.s[3]
+    LDR         q2, [x0], #16
+    FMLA        v23.4s, v6.4s,  v3.s[2]
+    FMLA        v23.4s, v7.4s,  v3.s[3]
+    
+    LDR         q3, [x0], #16
     LDR         q5, [x1], #16
 
-
-    PRFM        PLDL1KEEP, [x12] 
-    FMLA        v20.4s, v6.4s,  v0.s[2]
-    FMLA        v21.4s, v6.4s,  v1.s[2]
-    FMLA        v22.4s, v6.4s,  v2.s[2]
-    FMLA        v23.4s, v6.4s,  v3.s[2]
-    LDR         q6, [x1], #16
-
-    PRFM        PLDL1KEEP, [x13] 
-    FMLA        v20.4s, v7.4s,  v0.s[3]
-    FMLA        v21.4s, v7.4s,  v1.s[3]
-    FMLA        v22.4s, v7.4s,  v2.s[3]
-    FMLA        v23.4s, v7.4s,  v3.s[3]
-    LDR         q7, [x1], #16
-
-
-    LDR         q0, [x0], #16
-    LDR         q1, [x11], #16
-    LDR         q2, [x12], #16
-    LDR         q3, [x13], #16
 
 
     ADD         x7, x7, x17
